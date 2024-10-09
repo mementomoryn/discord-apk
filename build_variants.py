@@ -13,41 +13,47 @@ def build_apks(latest_version: Version):
     apkrenamer = "bins/apkrenamer/renamer.jar"
     output_list = []
 
-    patch_revanced_apk(
-        cli,
-        integrations,
-        patches,
+    rename_apk(
+        apkrenamer,
         apk,
-        includes=["Bring back twitter"],
-        excludes=[],
-        riparch=["armeabi-v7a", "x86", "x86_64"],
-        out=f"twitter-piko-v{latest_version.version}.apk",
+        out="revenge-discord-renamed.apk"
+        name="Revenge",
+        package="io.github.revenge.app",
+        icon="icons/revenge-discord.png",
         files=output_list
-    )
-
-    patch_revanced_apk(
-        cli,
-        integrations,
-        patches,
-        apk,
-        includes=["Bring back twitter"],
-        exclusive=True,
-        riparch=["armeabi-v7a", "x86", "x86_64"],
-        out="bring-back-twitter.apk"
     )
 
     patch_xposed_apk(
         lspatch,
         xposed,
-        apk="bring-back-twitter.apk",
-        out_dir="twitter-hachidori",
-        out=f"twitter-hachidori-v{latest_version.version}.apk",
+        apk="revenge-discord-renamed.apk",
+        out_dir="revenge-discord",
+        out=f"discord-revenge-v{latest_version.version}.apk",
+        files=output_list
+    )
+
+    rename_apk(
+        apkrenamer,
+        apk,
+        out="bunny-discord-renamed.apk"
+        name="Bunny",
+        package="io.github.bunny.app",
+        icon="icons/bunny-discord.png",
+        files=output_list
+    )
+
+    patch_xposed_apk(
+        lspatch,
+        xposed,
+        apk="bunny-discord-renamed.apk",
+        out_dir="bunny-discord",
+        out=f"discord-bunny-v{latest_version.version}.apk",
         files=output_list
     )
 
     move_merged_apk(
         apk,
-        out=f"twitter-merged-v{latest_version.version}.apk",
+        out=f"discord-merged-v{latest_version.version}.apk",
         files=output_list
     )
     
