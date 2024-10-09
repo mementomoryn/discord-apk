@@ -16,7 +16,7 @@ def build_apks(latest_version: Version):
     rename_apk(
         apkrenamer,
         apk,
-        out="revenge-discord-renamed.apk"
+        out="revenge-discord-renamed.apk",
         name="Revenge",
         package="io.github.revenge.app",
         icon="icons/revenge-discord.png",
@@ -35,7 +35,7 @@ def build_apks(latest_version: Version):
     rename_apk(
         apkrenamer,
         apk,
-        out="bunny-discord-renamed.apk"
+        out="bunny-discord-renamed.apk",
         name="Bunny",
         package="io.github.bunny.app",
         icon="icons/bunny-discord.png",
