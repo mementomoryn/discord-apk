@@ -89,7 +89,7 @@ def extract_archive(zip_path: str, dir_path: str, file_path: str, regex: str, ke
         shutil.unpack_archive(zip_path, dir_path)
     else:
         shutil.unpack_archive(zip_path, out_dir)
-        os.rename(f"{out_dir}.lstrip('/')/{folders}", dir_path)
+        os.rename(f"{out_dir.lstrip("/")}/{folders}", dir_path)
 
     os.remove(zip_path)
 
@@ -202,7 +202,7 @@ def patch_revanced_apk(
         "-m",
         integrations,
         "--keystore",
-        "bks.keystore",
+        "keystores/revanced.bks",
         "--keystore-entry-password",
         keystore_password,
         "--keystore-password",
@@ -263,7 +263,7 @@ def patch_xposed_apk(
         "--embed",
         xposed,
         "--keystore",
-        "jks.keystore",
+        "keystores/lspatch.bks",
         keystore_password,
         keystore_alias,
         keystore_password,
