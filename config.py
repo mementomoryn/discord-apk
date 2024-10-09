@@ -1,4 +1,5 @@
-APKMIRROR_URL: str = "https://www.apkmirror.com/apk/discord-inc/discord-chat-for-gamers/"
+# APKMIRROR_URL: str = "https://www.apkmirror.com/apk/discord-inc/discord-chat-for-gamers/"
+APKMIRROR_URL: str = "https://www.apkmirror.com/apk/x-corp/twitter/"
 
 REVANCED_PATCH_REPOSITORY: str = "revanced/revanced-patches"
 
