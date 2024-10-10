@@ -1,5 +1,5 @@
 # Discord APK
-Automated scripts to download Discord APK, and modified it with [Revenge](https://github.com/revenge-mod/revenge)
+Automated scripts to download Discord APK, and modified it with [Revenge](https://github.com/revenge-mod/revenge).
 
 <div align="center">
 
