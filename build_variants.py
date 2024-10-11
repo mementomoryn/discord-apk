@@ -19,8 +19,7 @@ def build_apks(latest_version: Version):
         out="revenge-discord-renamed.apk",
         name="Revenge",
         package="io.github.revenge.app",
-        icon="icons/revenge-discord.png",
-        files=output_list
+        icon="icons/revenge-discord.png"
     )
 
     patch_xposed_apk(
@@ -38,8 +37,7 @@ def build_apks(latest_version: Version):
         out="bunny-discord-renamed.apk",
         name="Bunny",
         package="io.github.bunny.app",
-        icon="icons/bunny-discord.png",
-        files=output_list
+        icon="icons/bunny-discord.png"
     )
 
     patch_xposed_apk(
