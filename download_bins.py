@@ -69,6 +69,7 @@ def download_apkrenamer():
     download_release_asset(APKRENAMER_REPOSITORY, "ApkRenamer", False, "bins", "apkrenamer.zip")
     extract_archive("bins/apkrenamer.zip", "bins/apkrenamer", "", "", True, "bins", "ApkRenamer")
     shutil.move("bins/apkrenamer/bin", "bin")
+    shutil.move("bins/apkrenamer/keys", "keys")
     exe_permission("bin/zipalign")
 
 
