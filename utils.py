@@ -1,5 +1,5 @@
 import os
-imoort stat
+import stat
 import re
 import shutil
 import requests
