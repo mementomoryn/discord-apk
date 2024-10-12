@@ -14,7 +14,7 @@ def panic(message: str):
 
 
 def exe_permission(path: str):
-   os.chmod(path, stat.S_IEXEC)
+    os.chmod(path, stat.S_IEXEC)
 
 
 def send_message(message: str, token: str, chat_id: str, thread_id: str):
