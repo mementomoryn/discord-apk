@@ -79,6 +79,8 @@ jobs:
         files: '["constants.py"]'
       env :
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+    - name: Add executable permission
+      run: chmod +x ./bin/zipalign
     - name: Try building
       env: 
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
