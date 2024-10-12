@@ -1,4 +1,5 @@
 import os
+imoort stat
 import re
 import shutil
 import requests
@@ -10,6 +11,10 @@ from github import get_last_build_version
 def panic(message: str):
     print(message, file=sys.stderr)
     exit(1)
+
+
+def exe_permission(path: str):
+   os.chmod(path, stat.S_IEXEC)
 
 
 def send_message(message: str, token: str, chat_id: str, thread_id: str):
