@@ -1,10 +1,11 @@
 import requests
 import re
-from config import LSPATCH_REPOSITORY, APKEDITOR_REPOSITORY
+from config import LSPATCH_REPOSITORY, APKEDITOR_REPOSITORY, MANIFESTEDITOR_REPOSITORY
+from config import REVANCED_PATCH_VERSION, REVANCED_INTEGRATION_VERSION, REVANCED_CLI_VERSION, XPOSED_MODULE_VERSION
 from constants import HEADERS
 from utils import panic, exe_permission, extract_archive, download
 
-def download_release_asset(repo: str, regex: str, prerelease: bool, out_dir: str, filename=None):
+def download_release_asset(repo: str, regex: str, prerelease: bool, out_dir: str, filename=None, version = None):
     url = f"https://api.github.com/repos/{repo}/releases"
 
     if prerelease is False:
@@ -18,6 +19,15 @@ def download_release_asset(repo: str, regex: str, prerelease: bool, out_dir: str
         release = response.json()[0]
     else:
         release = response.json()
+        
+    if not release:
+        raise Exception(f"No release found for {repo}")
+
+    if not version or version is not None:
+        release = [i for i in release if i["tag_name"] == version]
+        if len(release) == 0:
+            raise Exception(f"No release found for version {version} on {repo}")
+
 
     link = None
     for i in release["assets"]:
@@ -58,6 +68,11 @@ def download_artifact_asset(repo: str, artifact_regex: str, archive_regex: str, 
         download_release_asset(repo, release_regex, False, out_dir, filename)
 
 
+def download_manifesteditor():
+    print("Downloading manifesteditor")
+    download_release_asset(MANIFESTEDITOR_REPOSITORY, "ManifestEditor", False, "bins", "manifesteditor.jar")
+    
+    
 def download_apkeditor():
     print("Downloading apkeditor")
     download_release_asset(APKEDITOR_REPOSITORY, "APKEditor", False, "bins", "apkeditor.jar")
@@ -70,7 +85,7 @@ def download_lspatch():
 
 def download_xposed_bins(repo_url: str, regex: str, prerelease: bool = False):
     print("Downloading xposed")
-    download_release_asset(repo_url, regex, prerelease, "bins", "xposed.apk")
+    download_release_asset(repo_url, regex, prerelease, "bins", "xposed.apk", XPOSED_MODULE_VERSION)
 
 
 def download_revanced_bins(repo_url: str, type: str, prerelease: bool = False):
@@ -79,18 +94,21 @@ def download_revanced_bins(repo_url: str, type: str, prerelease: bool = False):
             print("Downloading cli")
             regex = r"^.*-cli-.*\.jar$"
             output = "cli.jar"
+            version = REVANCED_CLI_VERSION
         case "patch":
             print("Downloading patches")
             regex = r"^.*-patches-.*\.jar$"
             output = "patches.jar"
+            version = REVANCED_PATCH_VERSION
         case "integration":
             print("Downloading integrations")
             regex = r"^.*-integrations-.*\.apk$"
             output = "integrations.apk"
+            version = REVANCED_INTEGRATION_VERSION
         case _:
             panic("Assets bin type is not recognized")
 
-    download_release_asset(repo_url, regex, prerelease, "bins", output)
+    download_release_asset(repo_url, regex, prerelease, "bins", output, version)
 
 
 if __name__ == "__main__":
