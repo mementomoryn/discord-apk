@@ -34,18 +34,23 @@ def main():
         return None if not string else string
     
     parser.add_argument("-v", "--version", nargs="?", action="store", dest="version", type=argsNotEmpty, const=None, default=None)
-    parser.add_argument("-p", "--prerelease", nargs="*", action="store", dest="prerelease", choices=["true", "false"], default=["false", "false", "false", "false", "false"])
+    parser.add_argument("-p", "--prerelease", nargs="*", action="store", dest="prerelease", choices=["true", "false"], default=["false", "false", "false", "false", "false", "false"])
     args = parser.parse_args()
 
-    if len(args.prerelease) != 5:
+    if len(args.prerelease) != 6:
         panic("Prerelease argument list is not correct")
     else:
-        prerelease_build: bool = "true" in args.prerelease or "pre" in os.environ["RELEASE_VERSION"]
+        if os.environ["OVERRIDE_STABLE"] is "false":
+            prerelease_build: bool = "true" in args.prerelease or "pre" in os.environ["RELEASE_VERSION"]
+        else:
+            prerelease_build: bool = False
+        
         prerelease_cli: bool = args.prerelease[0] == "true"
         prerelease_patch: bool = args.prerelease[1] == "true"
         prerelease_int: bool = args.prerelease[2] == "true"
         prerelease_xp: bool = args.prerelease[3] == "true"
-        prerelease_apk: bool = args.prerelease[4] == "true"
+        prerelease_lp: bool = args.prerelease[4] == "true"
+        prerelease_apk: bool = args.prerelease[5] == "true"
 
     if args.version is None:
         versions = apkmirror.get_versions(url)
@@ -158,7 +163,7 @@ def main():
         revanced_changelog_notes: str = ""
 
     if "xposed" in bins_list:
-        download_lspatch()
+        download_lspatch(prerelease_lp)
         download_xposed_bins(xposed_url, r"^.*\d+\.apk$", prerelease_xp)
 
         xposed_version_notes: str = "**Xposed**: " + last_xposed_version.tag_name + "\n\n"
