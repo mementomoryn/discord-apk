@@ -41,7 +41,7 @@ def previous_version(index: int, changelog: str) -> str:
 
 
 def format_changelog(changelog: str) -> str:
-    replaces: str = re.sub(r"(?m)^#{1}\s", "### ",changelog.replace("\r\n\r\nONLY support ROOTED Android device with LSPosed v1.9.2 (7024) and above\r\n\r\nLong press X icon on top of the home screen or tap version in about section to access settings.\r\n\r\nPlease DO NOT tweet/post anything about this module at Twitter/X.", ""))
+    replaces: str = re.sub(r"(?m)^#{1}\s", "### ", re.sub("\r\n\r\nONLY support ROOTED Android device with LSPosed.*\r\n\r\n.*\r\n\r\nPlease DO NOT tweet/post anything about this module at Twitter/X.", "", changelog))
     if replaces.find("#") == -1:
         loglist: str = replaces.split("### ")
         append: str = ["" + log for log in loglist]
@@ -135,11 +135,14 @@ def download(link, out, headers=None):
                 f.write(chunk)
 
 
-def run_command(command: list[str]):
-    cmd = subprocess.run(command, capture_output=True, shell=True)
+def run_command(command: list[str], return_log: bool):
+    cmd = subprocess.run(command, capture_output=True, shell=True, env=os.environ.copy())
 
     try:
-        cmd.check_returncode()
+        if return_log is True:
+            cmd.check_returncode()
+        else:
+            cmd
     except subprocess.CalledProcessError:
         print(cmd.stdout)
         print(cmd.stderr)
@@ -147,9 +150,9 @@ def run_command(command: list[str]):
 
 
 def merge_apk(path: str):
-    subprocess.run(
-        ["java", "-jar", "./bins/apkeditor.jar", "m", "-i", path]
-    ).check_returncode()
+    run_command(
+        ["java", "-jar", "./bins/apkeditor.jar", "m", "-i", path], False
+    )
 
 
 def move_merged_apk(
@@ -220,7 +223,7 @@ def patch_revanced_apk(
 
     command.append(apk)
 
-    subprocess.run(command).check_returncode()
+    run_command(command, True)
 
     # remove -patched from the apk to match out
     if out is not None:
@@ -261,7 +264,7 @@ def patch_xposed_apk(
 
     command.append(apk)
 
-    subprocess.run(command).check_returncode()
+    run_command(command, True)
 
     if out is not None:
         patch_output = os.listdir(out_dir)[0]
@@ -300,4 +303,4 @@ def publish_release(notes: str, prerelease: bool, files: list[str]):
     for file in files:
         command.append(file)
 
-    subprocess.run(command, env=os.environ.copy()).check_returncode()
+    run_command(command, True)
